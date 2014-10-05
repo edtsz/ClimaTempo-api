@@ -1,6 +1,7 @@
 <?php
 namespace ClimaTempo\Cidades;
 
+use ClimaTempo\ClimaTempo;
 use ClimaTempo\Previsao\Previsao;
 
 class Cidade
@@ -21,6 +22,15 @@ class Cidade
      * @var Previsao
      */
     protected $previsao;
+    /**
+     * @var ClimaTempo
+     */
+    protected $ct;
+
+    public function __construct(ClimaTempo $ct)
+    {
+        $this->ct = $ct;
+    }
 
     /**
      * @return int
@@ -97,7 +107,7 @@ class Cidade
     public function getPrevisao()
     {
         if (!$this->previsao instanceof Previsao) {
-            $this->previsao = new Previsao($this);
+            $this->previsao = new Previsao($this, $this->ct);
         }
 
         return $this->previsao;

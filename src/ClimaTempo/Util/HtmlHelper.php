@@ -8,6 +8,9 @@ class HtmlHelper
      */
     protected $dom;
 
+    /**
+     * @return \DOMDocument
+     */
     public function getDom()
     {
         if (!$this->dom instanceof \DOMDocument) {
@@ -17,6 +20,9 @@ class HtmlHelper
         return $this->dom;
     }
 
+    /**
+     * @return \DOMDocument
+     */
     public function resetDom()
     {
         $this->dom = new \DOMDocument();

@@ -1,23 +1,37 @@
 <?php
 namespace ClimaTempo;
 
+use Pimple;
+use ClimaTempo\Util\HtmlHelper;
+use ClimaTempo\Util\StringHelper;
+use ClimaTempo\Cidades\Cidade;
 use ClimaTempo\Cidades\Cidades;
+use ClimaTempo\Factories\CidadeFactory;
 
-class ClimaTempo
+class ClimaTempo extends Pimple
 {
-    /**
-     * @var Cidades
-     */
-    protected $cidades;
-
     public function __construct()
     {
-        $this->cidades = new Cidades();
+        $this['cidades'] = $this->share(function() {
+            return new Cidades($this);
+        });
+        $this['stringHelper'] = $this->share(function() {
+            return new StringHelper();
+        });
+        $this['htmlHelper'] = $this->share(function() {
+            return new HtmlHelper();
+        });
+        $this['cidadeFactory'] = $this->share(function() {
+            return new CidadeFactory($this);
+        });
     }
 
+    /**
+     * @return Cidades
+     */
     public function getCidades()
     {
-        return $this->cidades;
+        return $this['cidades'];
     }
 
     /**
@@ -27,6 +41,6 @@ class ClimaTempo
      */
     public function busca($cidade, $limite = 10)
     {
-        return $this->cidades->busca($cidade, $limite);
+        return $this->getCidades()->busca($cidade, $limite);
     }
 } 

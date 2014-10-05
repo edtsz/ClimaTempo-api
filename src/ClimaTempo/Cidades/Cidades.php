@@ -1,27 +1,20 @@
 <?php
 namespace ClimaTempo\Cidades;
 
-use ClimaTempo\Factories\CidadeFactory;
-use ClimaTempo\Cidades\Cidade;
-use ClimaTempo\Util\StringHelper;
+use ClimaTempo\ClimaTempo;
 
 class Cidades
 {
     protected $estados;
     /**
-     * @var StringHeper
+     * @var ClimaTempo
      */
-    protected $strHelper;
-    /**
-     * @var CidadeFactory
-     */
-    protected $cidadeFactory;
+    protected $climaTempo;
 
-    public function __construct()
+    public function __construct(ClimaTempo $ct)
     {
         $this->estados = json_decode(file_get_contents(__DIR__ . "/../Resources/cidades.json"));
-        $this->strHelper = new StringHelper();
-        $this->cidadeFactory = new CidadeFactory();
+        $this->climaTempo = $ct;
     }
 
     /**
@@ -31,16 +24,16 @@ class Cidades
      */
     public function busca($cidadeAPesquisar, $limite = 10)
     {
-        $cidadeAPesquisar = $this->strHelper->clean($cidadeAPesquisar);
+        $cidadeAPesquisar = $this->climaTempo['stringHelper']->clean($cidadeAPesquisar);
         $this->validateArgumentsForBusca($cidadeAPesquisar, $limite);
 
         $cidades = [];
 
         foreach ($this->estados as $estado) {
             foreach ($estado->cidades as $cidade) {
-                if (false !== strpos(strtolower($this->strHelper->clean($cidade->nome)),
+                if (false !== strpos(strtolower($this->climaTempo['stringHelper']->clean($cidade->nome)),
                         strtolower($cidadeAPesquisar))) {
-                    $cidades[] = $this->cidadeFactory->create($cidade->id, $cidade->nome, $estado->uf);
+                    $cidades[] = $this->climaTempo['cidadeFactory']->create($cidade->id, $cidade->nome, $estado->uf);
                 }
 
                 if (count($cidades) == $limite) {
@@ -61,7 +54,7 @@ class Cidades
         foreach ($this->estados as $estado) {
             foreach ($estado->cidades as $cidade) {
                 if ($cidade->id == $cidadeId) {
-                    return $this->cidadeFactory->create($cidade->id, $cidade->nome, $estado->uf);
+                    return $this->climaTempo['cidadeFactory']->create($cidade->id, $cidade->nome, $estado->uf);
                 }
             }
         }

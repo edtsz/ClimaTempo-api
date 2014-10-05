@@ -36,4 +36,3 @@ API em PHP para extrair dados do site [ClimaTempo](http://www.climatempo.com.br)
 # TODO
 
 - Corrigir testes unitários
-- Implementar e corrigir Dependency Injection

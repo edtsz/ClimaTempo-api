@@ -1,72 +1,77 @@
 <?php
 namespace ClimaTempo\Previsao;
 
+use ClimaTempo\ClimaTempo;
 use ClimaTempo\Cidades\Cidade;
-use ClimaTempo\Util\HtmlHelper;
-use ClimaTempo\Util\StringHelper;
 
 class Previsao
 {
+    /**
+     * @var ClimaTempo
+     */
+    protected $ct;
     protected $url = "http://www.climatempo.com.br/previsao-do-tempo/cidade/";
-    protected $strHelper;
-    protected $htmlHelper;
     protected $results = [];
     protected $tempos = [
         "Ensolarado", "Nublado", "Chuvisco", "Chuvas Isoladas", "Chuvoso", "Chuva com trovoadas",
         "Ensolarado", "Neve", "Sol com poucas nuvens"
     ];
 
-    public function __construct(Cidade $cidade)
+    public function __construct(Cidade $cidade, ClimaTempo $ct)
     {
-        $this->strHelper = new StringHelper();
-        $this->htmlHelper = new HtmlHelper();
-
-        $cidade_nome = $this->strHelper->clean($cidade->getNome());
+        $this->ct = $ct;
+        $cidade_nome = $this->ct['stringHelper']->clean($cidade->getNome());
         $cidade_uf = strtolower($cidade->getUf());
 
         $this->url .= "{$cidade->getId()}/{$cidade_nome}-{$cidade_uf}";
 
-        $html = $this->htmlHelper->google_curl($this->url);
+        $html = $this->ct['htmlHelper']->google_curl($this->url);
 
         // TODO: Tratar os erros html que retornam na função abaixo
-        @$this->htmlHelper->getDom()->loadHTML($html);
+        @$this->ct['htmlHelper']->getDom()->loadHTML($html);
 
-        $wrapperDivs = $this->htmlHelper->get_all_by_class($this->htmlHelper->getDom(), "box-prev-completa");
+        $wrapperDivs = $this->ct['htmlHelper']->get_all_by_class($this->ct['htmlHelper']->getDom(),
+            "box-prev-completa");
 
         foreach ($wrapperDivs as $node) {
             $this->results[] = [
-                "dia"     => trim($this->htmlHelper->get_one_by_class($node, "data-prev")->nodeValue),
+                "dia"     => trim($this->ct['htmlHelper']->get_one_by_class($node, "data-prev")->nodeValue),
                 "tempo"   => $this->get_previsao_horarios($node),
-                "tempMax" => trim($this->htmlHelper->get_one_by_class($node, "max")->nodeValue),
-                "tempMin" => trim($this->htmlHelper->get_one_by_class($node, "min")->nodeValue),
-                "resumo"  => trim($this->htmlHelper->get_one_by_class($node, "fraseologia-prev")->nodeValue)
+                "tempMax" => trim($this->ct['htmlHelper']->get_one_by_class($node, "max")->nodeValue),
+                "tempMin" => trim($this->ct['htmlHelper']->get_one_by_class($node, "min")->nodeValue),
+                "resumo"  => trim($this->ct['htmlHelper']->get_one_by_class($node, "fraseologia-prev")->nodeValue)
             ];
         }
     }
 
     public function hoje()
     {
-       return isset($this->results[0]) ? $this->results[0] : "Dados indisponíveis";
+       return isset($this->results[0]) ? $this->results[0] : ["Dados indisponíveis"];
     }
 
     public function amanha()
     {
-        return isset($this->results[1]) ? $this->results[1] : "Dados indisponíveis";
+        return isset($this->results[1]) ? $this->results[1] : ["Dados indisponíveis"];
     }
 
     public function depoisDeAmanha()
     {
-        return isset($this->results[2]) ? $this->results[2] : "Dados indisponíveis";
+        return isset($this->results[2]) ? $this->results[2] : ["Dados indisponíveis"];
+    }
+
+    public function previsaoCompleta()
+    {
+        return count($this->results) ? $this->results : ["Dados indisponíveis"];
     }
 
     private function get_previsao_horarios($node)
     {
         $prevs = [];
 
-        $tmp_dom = $this->htmlHelper->resetDom();
-        $tmp_dom->appendChild($tmp_dom->importNode($node, true));
+        $tmp_dom = $this->ct['htmlHelper']->resetDom();
+        $this->ct['htmlHelper']->resetDom()->appendChild($this->ct['htmlHelper']->getDom()->importNode($node, true));
 
-        $previsoes = $this->htmlHelper->get_all_by_class($tmp_dom, "ico-sprite-prev-span");
+        $previsoes = $this->ct['htmlHelper']->get_all_by_class($tmp_dom, "ico-sprite-prev-span");
 
         $i = 0;
         $tipos = ["Manhã", "Tarde", "Noite"];
