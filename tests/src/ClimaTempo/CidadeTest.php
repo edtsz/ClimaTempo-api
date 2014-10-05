@@ -1,6 +1,7 @@
 <?php
 namespace ClimaTempo;
 
+use ClimaTempo\ClimaTempo;
 use ClimaTempo\Cidades\Cidade;
 
 class CidadeTest extends \PHPUnit_Framework_TestCase
@@ -12,7 +13,7 @@ class CidadeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cidade = new Cidade();
+        $this->cidade = new Cidade(new ClimaTempo());
     }
 
     public function tearDown()

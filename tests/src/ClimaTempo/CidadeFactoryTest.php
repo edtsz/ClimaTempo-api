@@ -1,6 +1,7 @@
 <?php
 namespace ClimaTempo;
 
+use ClimaTempo\ClimaTempo;
 use ClimaTempo\Factories\CidadeFactory;
 
 class CidadeFactoryTest extends \PHPUnit_Framework_TestCase
@@ -12,7 +13,7 @@ class CidadeFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->factory = new CidadeFactory();
+        $this->factory = new CidadeFactory(new ClimaTempo());
     }
 
     public function tearDown()
