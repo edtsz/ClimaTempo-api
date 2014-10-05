@@ -28,19 +28,51 @@ class CidadeTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
+    public function testIdException()
+    {
+        $this->cidade->setId("invalido");
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testNomeException()
+    {
+        $this->cidade->setNome(123);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUfException1()
+    {
+        $this->cidade->setUf(123);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUfException2()
+    {
+        $this->cidade->setUf("A");
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testUfException3()
+    {
+        $this->cidade->setUf("ABC");
+    }
+
     public function testSettersAndGetters()
     {
-        $this->cidade->setId("invalido"); // throws exception
         $this->assertInstanceOf('ClimaTempo\Cidades\Cidade', $this->cidade->setId(123));
         $this->assertEquals(123, $this->cidade->getId());
 
-        $this->cidade->setNome(123); // throws exception
         $this->assertInstanceOf('ClimaTempo\Cidades\Cidade', $this->cidade->setNome("Nome da Cidade"));
         $this->assertEquals("Nome da Cidade", $this->cidade->getNome());
 
-        $this->cidade->setUf(123); // throws exception
-        $this->cidade->setUf("A"); // throws exception
-        $this->cidade->setUf("ABC"); // throws exception
         $this->assertInstanceOf('ClimaTempo\Cidades\Cidade', $this->cidade->setUf("UF"));
         $this->assertEquals("UF", $this->cidade->getUf());
     }
