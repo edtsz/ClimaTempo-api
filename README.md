@@ -16,12 +16,12 @@ API em PHP para extrair dados do site [ClimaTempo](http://www.climatempo.com.br)
     // Achar Cidade
     $cid = $climatempo->busca("belo hori"); // Belo Horizonte
     
-    echo $cid[0]->getNome() . "<br>";
-    print_r($cid[0]->getPrevisao()->hoje());
-    print_r($cid[0]->getPrevisao()->amanha());
+    echo $cid->getNome() . "<br>";
+    print_r($cid->getPrevisao()->hoje());
+    print_r($cid->getPrevisao()->amanha());
     
     // Mostrar todos os dados da previsão
-    print_r($cid[0]->getPrevisao()->previsaoCompleta());
+    print_r($cid->getPrevisao()->previsaoCompleta());
     
     
     // Achar todas as Cidades que contêm "belo" no nome (em qualquer posição)
@@ -32,7 +32,3 @@ API em PHP para extrair dados do site [ClimaTempo](http://www.climatempo.com.br)
         echo $cidade->getPrevisao()->hoje()["tempMax"] . "<br>\n";
         echo $cidade->getPrevisao()->hoje()["resumo"] . "<hr>\n\n";
     }
-
-# TODO
-
-- Corrigir testes unitários

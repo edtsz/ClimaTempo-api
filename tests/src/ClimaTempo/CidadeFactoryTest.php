@@ -28,7 +28,6 @@ class CidadeFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testFunctionalTests()
     {
-        $this->assertInstanceOf('ClimaTempo\Cidades\Cidade', $this->factory->create());
         $this->assertInstanceOf('ClimaTempo\Cidades\Cidade', $this->factory->create(123, "nome da cidade", "uf"));
     }
 }

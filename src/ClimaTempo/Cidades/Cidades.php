@@ -20,7 +20,7 @@ class Cidades
     /**
      * @param string $cidadeAPesquisar
      * @param int $limite = 10
-     * @return Cidade[]
+     * @return Cidade|Cidade[]
      */
     public function busca($cidadeAPesquisar, $limite = 10)
     {
@@ -42,7 +42,7 @@ class Cidades
             }
         }
 
-        return $cidades;
+        return count($cidades) == 1 ? $cidades[0] : $cidades;
     }
 
     /**
