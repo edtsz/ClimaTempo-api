@@ -21,7 +21,7 @@ API em PHP para extrair dados do site [ClimaTempo](http://www.climatempo.com.br)
     print_r($cid[0]->getPrevisao()->amanha());
     
     // Mostrar todos os dados da previsão
-    print_r($cid[0]->getPrevisao());
+    print_r($cid[0]->getPrevisao()->previsaoCompleta());
     
     
     // Achar todas as Cidades que contêm "belo" no nome (em qualquer posição)
