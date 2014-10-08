@@ -6,12 +6,33 @@ use ClimaTempo\Previsao\Previsao;
 
 class PrevisaoTest extends \PHPUnit_Framework_TestCase
 {
-    public function testInstanceOfPrevisao()
+    /**
+     * @var Previsao
+     */
+    private $previsao;
+
+    public function setUp()
     {
         $climaTempo = new ClimaTempo();
         $cidade = $climaTempo->busca("Belo Horizonte");
-        $previsao = new Previsao($cidade, $climaTempo);
+        $this->previsao = new Previsao($cidade, $climaTempo);
+    }
 
-        $this->assertInstanceOf('ClimaTempo\Previsao\Previsao', $previsao);
+    public function tearDown()
+    {
+        $this->previsao = null;
+    }
+
+    public function testInstanceOfPrevisao()
+    {
+        $this->assertInstanceOf('ClimaTempo\Previsao\Previsao', $this->previsao);
+    }
+
+    public function testPrevisoes()
+    {
+        $this->assertTrue(is_array($this->previsao->hoje()));
+        $this->assertTrue(is_array($this->previsao->amanha()));
+        $this->assertTrue(is_array($this->previsao->depoisDeAmanha()));
+        $this->assertTrue(is_array($this->previsao->previsaoCompleta()));
     }
 }
